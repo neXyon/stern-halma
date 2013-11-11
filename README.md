@@ -14,7 +14,6 @@ ToDo/Wishlist
 * show more info in game list: players, status, etc
 * nice design
 * background rendering (so that the complete field is only rendered once)
-* code cleanup (splitting into more files, refactoring, Const instead of CONST etc)
 * thread safety (currently not existent)
 * more clients (android, WebGL, unity, etc?)
 
