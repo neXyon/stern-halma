@@ -112,8 +112,10 @@ window.onload = function () {
 		return { X: rx, Y: ry };
 	}
 	
-	function drawCanvas() {
-		var canvas = document.getElementById("board");
+	function createBackground(width, height) {
+		var canvas = document.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
 		var ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
@@ -172,6 +174,76 @@ window.onload = function () {
 							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#FFFF00");*/
 						else
 							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#000000");
+					}
+				}
+			}
+		}
+		
+		return canvas;
+	}
+	
+	function drawCanvas() {
+		var canvas = document.getElementById("board");
+		var ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		
+		/*drawTriangle(ctx, {X: 4, Y: -8}, {X: 0, Y: -4}, {X: 4, Y: -4}, "#FF0000");
+		drawTriangle(ctx, {X: -4, Y: 4}, {X: 0, Y: 4}, {X: -4, Y: 8}, "#FF0000");
+		drawTriangle(ctx, {X: -4, Y: -4}, {X: 0, Y: -4}, {X: -4, Y: 0}, "#00FF00");
+		drawTriangle(ctx, {X: 4, Y: 0}, {X: 4, Y: 4}, {X: 0, Y: 4}, "#00FF00");
+		drawTriangle(ctx, {X: 4, Y: -4}, {X: 8, Y: -4}, {X: 4, Y: 0}, "#0000FF");
+		drawTriangle(ctx, {X: -4, Y: 0}, {X: -8, Y: 4}, {X: -4, Y: 4}, "#0000FF");
+		
+		for(var z = -7; z <= 7; z++) {
+			var tz = Math.abs(z);
+			
+			var count = 8 + tz;
+			var from = -4 - z;
+			
+			if(tz > 4) {
+				count = 8 - tz;
+			}
+			
+			if((tz > 4) ^ (z != tz)) {
+				from = -4;
+			}
+			
+			var p1 = gridToPixel({X: from, Y: z});
+			var p2 = gridToPixel({X: from + count, Y: z});
+			
+			drawLine(ctx, p1, p2);
+			
+			p1 = gridToPixel({X: z, Y: -z - from});
+			p2 = gridToPixel({X: z, Y: -z - from - count});
+			
+			drawLine(ctx, p1, p2);
+			
+			p1 = gridToPixel({X: -z - from, Y: from});
+			p2 = gridToPixel({X: -z - from - count, Y: from + count});
+			
+			drawLine(ctx, p1, p2);
+		}*/
+		
+		ctx.drawImage(background, 0, 0);
+		
+		for(var u = -8; u <= 8; u++) {
+			for(var v = -8; v <= 8; v++) {
+				var tu = Math.abs(u);
+				var tv = Math.abs(v);
+				var tw = Math.abs(-u - v);
+				
+				if((tu <= 8 && tv <= 4 && tw <= 4) || (tu <= 4 && tv <= 8 && tw <=4) || (tu <= 4 && tv <= 4 && tw <=8)) {
+					if((g = getField({X: u, Y: v})) != null) {
+						if(g.pin == RED)
+							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#FF0000");
+						else if(g.pin == GREEN)
+							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#00FF00");
+						else if(g.pin == BLUE)
+							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#0000FF");
+						/*else if((tu + tv + tw) / 2 < 4)
+							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#FFFF00");*/
+						/*else
+							drawCircle(ctx, gridToPixel({X: u, Y: v}), "#000000");*/
 					}
 				}
 			}
@@ -366,9 +438,11 @@ window.onload = function () {
 	
 	var possible = [];
 	
-	drawCanvas();
-	
 	canvas = document.getElementById("board");
+	
+	var background = createBackground(canvas.width, canvas.height);
+	
+	drawCanvas();
 	
 	canvas.addEventListener("mousemove", onMouseMove);
 	canvas.addEventListener("mousedown", onMouseDown);

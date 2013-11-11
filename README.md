@@ -6,15 +6,16 @@ Stern Halma Game also known as Chinese checkers.
 ToDo/Wishlist
 -------------
 
-* persistency layer
-* AppEngine
-* security
 * animation
 * show paths on mouse over
 * show more info in game list: players, status, etc
 * nice design
-* background rendering (so that the complete field is only rendered once)
+
+* persistency layer
 * thread safety (currently not existent)
+* AppEngine
+* security
+
 * more clients (android, WebGL, unity, etc?)
 
 License
