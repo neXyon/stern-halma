@@ -67,7 +67,7 @@ type HalmaGamePlayer struct {
 }
 
 type HalmaClient interface {
-	NotifyMove(color HalmaColor, from *Position, to *Position)
+	NotifyMove(color HalmaColor, from Position, to Position)
 	NotifyTurn(current HalmaColor)
 }
 
@@ -83,19 +83,19 @@ func abs(x int) int {
 	return x
 }
 
-func (g *HalmaGame) createField(pos *Position, Type HalmaColor, Pin HalmaColor) {
+func (g *HalmaGame) createField(pos Position, Type HalmaColor, Pin HalmaColor) {
 	g.Fields[pos.X + 8][pos.Y + 8] = &HalmaField{Type, Pin}
 }
 
-func (g *HalmaGame) fieldValid(pos *Position) bool {
+func (g *HalmaGame) fieldValid(pos Position) bool {
 	return abs(pos.X) <= 8 && abs(pos.Y) <= 8 && g.getField(pos) != nil
 }
 
-func (g *HalmaGame) getField(pos *Position) *HalmaField {
+func (g *HalmaGame) getField(pos Position) *HalmaField {
 	return g.Fields[pos.X + 8][pos.Y + 8]
 }
 
-func (g *HalmaGame) calculatePossible(position *Position) []Position {
+func (g *HalmaGame) calculatePossible(position Position) []Position {
 	var visited [17][17]bool
 	
 	neighbors := []Position{
@@ -103,7 +103,7 @@ func (g *HalmaGame) calculatePossible(position *Position) []Position {
 		{-1, 0}, {-1, 1}, {0, 1},
 	}
 	
-	todo := []Position{*position}
+	todo := []Position{position}
 	possible := make([]Position, 0)
 	first := true
 	
@@ -123,10 +123,10 @@ func (g *HalmaGame) calculatePossible(position *Position) []Position {
 		for i := 0; i < len(neighbors); i++ {
 			nb1 := Position{pos.X + neighbors[i].X, pos.Y + neighbors[i].Y}
 			nb2 := Position{pos.X + 2 * neighbors[i].X, pos.Y + 2 * neighbors[i].Y}
-			if g.fieldValid(&nb1) && g.fieldValid(&nb2) && g.getField(&nb1).Pin != EMPTY && g.getField(&nb2).Pin == EMPTY {
+			if g.fieldValid(nb1) && g.fieldValid(nb2) && g.getField(nb1).Pin != EMPTY && g.getField(nb2).Pin == EMPTY {
 				todo = append(todo, nb2)
 			}
-			if first && g.fieldValid(&nb1) && g.getField(&nb1).Pin == EMPTY {
+			if first && g.fieldValid(nb1) && g.getField(nb1).Pin == EMPTY {
 				possible = append(possible, nb1)
 			}
 		}
@@ -196,36 +196,36 @@ func (g *HalmaGame) Start() {
 			
 			if (tu <= 8 && tv <= 4 && tw <= 4) || (tu <= 4 && tv <= 8 && tw <=4) || (tu <= 4 && tv <= 4 && tw <=8) {
 				if (tu + tv + tw) / 2 < 4 {
-					g.createField(&Position{u, v}, EMPTY, EMPTY)
+					g.createField(Position{u, v}, EMPTY, EMPTY)
 				} else if tv >= 4 && tv > tu && tv > tw  {
 					if v > 0 {
-						g.createField(&Position{u, v}, EMPTY, RED)
+						g.createField(Position{u, v}, EMPTY, RED)
 					} else {
-						g.createField(&Position{u, v}, RED, EMPTY)
+						g.createField(Position{u, v}, RED, EMPTY)
 					}
 				} else if tw >= 4 && tw > tv && tw > tu {
 					if -u - v > 0 {
-						g.createField(&Position{u, v}, EMPTY, green)
+						g.createField(Position{u, v}, EMPTY, green)
 					} else {
-						g.createField(&Position{u, v}, GREEN, EMPTY)
+						g.createField(Position{u, v}, GREEN, EMPTY)
 					}
 				} else if tu >= 4 && tu > tv && tu > tw {
 					if u > 0 {
-						g.createField(&Position{u, v}, EMPTY, blue)
+						g.createField(Position{u, v}, EMPTY, blue)
 					} else {
-						g.createField(&Position{u, v}, BLUE, EMPTY)
+						g.createField(Position{u, v}, BLUE, EMPTY)
 					}
 				}
 			}
 		}
 	}
 	
-	g.createField(&Position{0, -4}, RED, green)
-	g.createField(&Position{-4, 0}, BLUE, green)
-	g.createField(&Position{-4, 4}, BLUE, RED)
-	g.createField(&Position{0, 4}, GREEN, RED)
-	g.createField(&Position{4, 0}, GREEN, blue)
-	g.createField(&Position{4, -4}, RED, blue)
+	g.createField(Position{0, -4}, RED, green)
+	g.createField(Position{-4, 0}, BLUE, green)
+	g.createField(Position{-4, 4}, BLUE, RED)
+	g.createField(Position{0, 4}, GREEN, RED)
+	g.createField(Position{4, 0}, GREEN, blue)
+	g.createField(Position{4, -4}, RED, blue)
 	
 	g.State = RUNNING
 	g.CurrentPlayer = HalmaColor(rand.Intn(len(g.Players)) + 1)
@@ -281,7 +281,7 @@ type GameInfo struct {
 	CurrentPlayer HalmaColor
 }
 
-func (g *HalmaGame) Move(color HalmaColor, from *Position, to *Position) {
+func (g *HalmaGame) Move(color HalmaColor, from Position, to Position) {
 	if color != g.CurrentPlayer || !g.fieldValid(from) || !g.fieldValid(to) || g.getField(from).Pin != color {
 		return
 	}
@@ -370,7 +370,7 @@ func process(ws *websocket.Conn) {
 		switch(message.Type) {
 			case MOVE:
 				if client != nil && client.Player != nil {
-					game.Move(client.Player.Color, &message.Move.From, &message.Move.To)
+					game.Move(client.Player.Color, message.Move.From, message.Move.To)
 				}
 				break
 			case FIELD_INFO:
@@ -512,7 +512,7 @@ type HalmaWebsocketClient struct {
 	Player *HalmaGamePlayer
 }
 
-func (c *HalmaWebsocketClient) NotifyMove(color HalmaColor, from *Position, to *Position) {
+func (c *HalmaWebsocketClient) NotifyMove(color HalmaColor, from Position, to Position) {
 	var message HalmaMessage
 	
 	message.Type = FIELD_INFO

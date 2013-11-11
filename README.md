@@ -16,7 +16,6 @@ ToDo/Wishlist
 * background rendering (so that the complete field is only rendered once)
 * code cleanup (splitting into more files, refactoring, Const instead of CONST etc)
 * thread safety (currently not existent)
-* position parameters as per value instead of per reference
 * more clients (android, WebGL, unity, etc?)
 
 License
