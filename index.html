@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2013 by Jörg Müller <nexyon@gmail.com> All rights reserved.
+
+This file is part of stern-halma.
+
+stern-halma is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+stern-halma is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with stern-halma.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+	<head>
+		<title>Halma</title>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<script type="text/JavaScript" src="halma.js"></script>
+	</head>
+	<body>
+		<h1>Sternhalma</h1>
+		<table><tr>
+		<td>My Color:</td><td id="me">none</td><td>Current Player:</td><td id="current">none</td>
+		</tr></table>
+		<table id="games">
+		<tr><td>Game</td><td>Current Turn</td><td>My Color</td></tr>
+		</table>
+		<div><input type="button" id="newgame" value="New Game" /> <input type="button" id="refresh" value="Refresh" /></div>
+		<canvas id="board" width="600" height="600"></canvas>
+		<div id="loginform" style="position:fixed; top:0; left:0; bottom:0; right:0; min-width:100%; min-height:100%; background-color:#fff;">
+		<table style="position:fixed; width:200px; height:50px; left: 50%; top:50%; margin-left: -100px; margin-top: -25px;">
+		<tr>
+		<td>Name:</td>
+		<td><input type="text" id="name" /></td>
+		</tr>
+		<tr>
+		<td>Password:</td>
+		<td><input type="password" id="password" /></td>
+		</tr>
+		<tr>
+		<td><input type="button" id="register" value="Register" /></td>
+		<td><input type="button" id="login" value="Login" /></td>
+		</tr>
+		</table>
+		</div>
+	</body>
+</html>
