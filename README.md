@@ -1,7 +1,9 @@
 stern-halma
 ===========
 
-Stern Halma Game also known as Chinese checkers.
+Stern Halma Game also known as Chinese checkers in the three player version.
+
+![ScreenShot](https://raw.github.com/neXyon/stern-halma/master/screenshot.png)
 
 ToDo/Wishlist
 -------------
